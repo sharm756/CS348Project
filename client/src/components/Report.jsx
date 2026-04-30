@@ -8,7 +8,6 @@ export default function Report() {
   const [report, setReport] = useState(null);
   const [loading, setLoading] = useState(false);
 
-  // Fill distinct values in dropdowns:
   useEffect(() => {
     async function filter() {
       const response = await fetch("http://localhost:5050/record/report/stats");
@@ -18,7 +17,6 @@ export default function Report() {
     }
     filter();
   }, []);
-  // End fill
 
   async function generateReport(e) {
     e.preventDefault();
@@ -39,7 +37,6 @@ export default function Report() {
     <div className="p-4">
       <h3 className="text-lg font-semibold mb-4">Member Report</h3>
 
-      {/* Filter Form */}
       <form onSubmit={generateReport} className="border rounded-lg p-4 mb-6">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div>
@@ -83,12 +80,10 @@ export default function Report() {
         </button>
       </form>
 
-      {/* Report Output */}
       {loading && <p className="text-slate-500">Loading...</p>}
 
       {report && !loading && (
         <div>
-          {/* Summary Stats */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
             <div className="border rounded-lg p-4 text-center">
               <p className="text-2xl font-bold">{report.total}</p>
@@ -104,7 +99,6 @@ export default function Report() {
             </div>
           </div>
 
-          {/* Breakdown by Year */}
           <div className="mb-6">
             <h4 className="text-base font-semibold mb-2">Breakdown by Year</h4>
             <div className="border rounded-lg overflow-hidden">
@@ -131,7 +125,6 @@ export default function Report() {
             </div>
           </div>
 
-          {/* Breakdown by Position */}
           <div className="mb-6">
             <h4 className="text-base font-semibold mb-2">Breakdown by Position</h4>
             <div className="border rounded-lg overflow-hidden">
@@ -158,7 +151,6 @@ export default function Report() {
             </div>
           </div>
 
-          {/* Member List */}
           <div>
             <h4 className="text-base font-semibold mb-2">Matching Members</h4>
             <div className="border rounded-lg overflow-hidden">

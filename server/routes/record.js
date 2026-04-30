@@ -44,7 +44,6 @@ router.get("/report/stats", async (req, res) => {
     const positions = [...new Set(mems.map(m => m.position).filter(Boolean))];
     const years = [...new Set(mems.map(m => m.year).filter(Boolean))];
     // End get distinct values for dropdowns
-    // Send stats
     res.status(200).json({
       total,
       records,
