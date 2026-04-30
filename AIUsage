@@ -5,9 +5,9 @@ frontend and backend, I made sure to test the application dozens of times and en
 report populates accurate information on the frontend, even when data is modified. I also verified 
 that Claude’s suggestions to protect against injection and add transactions led to a working 
 application by performing dozens of application walkthroughs, and did my own research using 
-resources like MongoDB, GitHub, and Stack Overflow to ensure that the changes I implemented do 
-work and exactly how they work. I even modified the mongoSanitize statement in server.js to make 
-it work for my particular application by specifying the mongoSanitize statement to my request 
-body. Before, Claude suggested using a generic app.use(mongoSanitize()), which I discovered was 
-trying to overwrite my request query. Since req.query isn't modified by the user, I made the 
+resources like MongoDB, GitHub, and Stack Overflow to ensure that the changes I implemented have
+the expected behavior and exactly how they work. I even modified the mongoSanitize statement in 
+server.js to make it work for my particular application by specifying the mongoSanitize statement to 
+my request body. Before, Claude suggested using a generic app.use(mongoSanitize()), which I discovered 
+was trying to overwrite my request query. Since req.query isn't modified by the user, I made the 
 adjustment to req.body specifically.
