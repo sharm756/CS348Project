@@ -18,8 +18,11 @@ export default function Record() {
       setIsNew(false);
       // Loading existing member data:
       const response = await fetch(
-        `http://localhost:5050/record/${params.id.toString()}`
+        `https://cs348project-b5vn.onrender.com/record/${params.id.toString()}`
       );
+      /*const response = await fetch(
+        `http://localhost:5050/record/${params.id.toString()}`
+      );*/
       if (!response.ok) {
         const message = `An error has occurred: ${response.statusText}`;
         console.error(message);
@@ -52,7 +55,8 @@ export default function Record() {
     try {
       let response;
       if (isNew) {
-        response = await fetch("http://localhost:5050/record", {
+        response = await fetch("https://cs348project-b5vn.onrender.com/record", {
+        //response = await fetch("http://localhost:5050/record", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -60,7 +64,8 @@ export default function Record() {
           body: JSON.stringify(person),
         });
       } else {
-        response = await fetch(`http://localhost:5050/record/${params.id}`, {
+        response = await fetch(`https://cs348project-b5vn.onrender.com/record/${params.id}`, {
+        //response = await fetch(`http://localhost:5050/record/${params.id}`, {
           method: "PATCH",
           headers: {
             "Content-Type": "application/json",

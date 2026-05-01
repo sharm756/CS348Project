@@ -156,49 +156,4 @@ router.delete("/:id", async (req, res) => {
   }
 });
 
-/* router.get("/report/stats", async (req, res) => {
-  try {
-    let q = {};
-    const { year, position } = req.query;
-    if (position && position !== "All" && typeof position === "string") {
-      q.position = position;
-    }
-    if (year && year !== "All" && typeof year === "string") {
-      q.year = year;
-    }
-    let table = await db.collection("records");
-    let results = await table.find(q).toArray();
-
-    const total = results.length;
-
-    const yearCounts = results.reduce((acc, r) => {
-      acc[r.year] = (acc[r.year] || 0) + 1;
-      return acc;
-    }, {});
-
-    const positionCounts = results.reduce((acc, r) => {
-      acc[r.position] = (acc[r.position] || 0) + 1;
-      return acc;
-    }, {});
-
-    // Get distinct values for filter dropdowns
-    const mems = await table.find({}).toArray();
-    const positions = [...new Set(mems.map(m => m.position).filter(Boolean))];
-    const years = [...new Set(mems.map(m => m.year).filter(Boolean))];
-    // End get distinct values for dropdowns
-    // Send stats
-    res.status(200).json({
-      total,
-      results,
-      yearCounts,
-      positionCounts,
-      years,
-      positions,
-    });
-  } catch (err) {
-    console.error(err);
-    res.status(500).send("Error generating report");
-  }
-}); */
-
 export default router;
