@@ -14,7 +14,7 @@ const client = new MongoClient(uri, {
   socketTimeoutMS: 45000,
 });
 
-try {
+/*try {
   await client.connect();
   await client.db("admin").command({ ping: 1 });
   console.log(
@@ -31,4 +31,29 @@ try {
 let database = client.db("members");
 
 export default database;
-export {client};
+export {client}; */
+
+async function connectDB() {
+  try {
+    await client.connect();
+    await client.db("admin").command({ ping: 1 });
+    console.log("Pinged your deployment. You successfully connected to MongoDB!");
+    let table = client.db("members");
+    await table.collection("records").createIndex({ position: 1, year: 1 });
+    await table.collection("records").createIndex({ year: 1 });
+    await table.collection("records").createIndex({ position: 1 });
+  } catch (err) {
+    console.error(err);
+    setTimeout(connectDB, 5000);
+  }
+}
+
+connectDB();
+
+client.on("close", () => {
+  console.log("MongoDB connection closed. Reconnecting...");
+  connectDB();
+});
+
+let table = client.db("members");
+export default table;
