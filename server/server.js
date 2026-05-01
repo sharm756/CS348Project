@@ -8,9 +8,7 @@ import mongoSanitize from "express-mongo-sanitize";
 const PORT = process.env.PORT || 5050;
 const app = express();
 
-app.use(cors({
-  origin: "https://cs348project-smoky.vercel.app"
-}));
+app.use(cors());
 app.use(express.json());
 app.use((req, res, next) => {
   mongoSanitize.sanitize(req.body);

@@ -41,8 +41,7 @@ export default function RecordList() {
   // Loading member data:
   useEffect(() => {
     async function getRecords() {
-      const response = await fetch(`https://cs348project-b5vn.onrender.com/record/`);
-      //const response = await fetch(`http://localhost:5050/record/`);
+      const response = await fetch(`http://localhost:5050/record/`);
       if (!response.ok) {
         const message = `An error occurred: ${response.statusText}`;
         console.error(message);
@@ -57,8 +56,7 @@ export default function RecordList() {
   // End loading member data
   // This method will delete a record
   async function deleteRecord(id) {
-    await fetch(`https://cs348project-b5vn.onrender.com/record/${id}`, {
-    //await fetch(`http://localhost:5050/record/${id}`, {
+    await fetch(`http://localhost:5050/record/${id}`, {
       method: "DELETE",
     });
     const newRecords = records.filter((el) => el._id !== id);

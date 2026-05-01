@@ -1,6 +1,6 @@
 import express from "express";
 
-import database, { client, getDB } from "../db/connection.js";
+import database, { client } from "../db/connection.js";
 
 import { ObjectId } from "mongodb";
 
@@ -8,8 +8,7 @@ const router = express.Router();
 
 // Retrieve current data
 router.get("/", async (req, res) => {
-  let collection = await (await getDB()).collection("records");
-  //let collection = await database.collection("records");
+  let collection = await database.collection("records");
   let results = await collection.find({}).toArray();
   res.send(results).status(200);
 });
@@ -25,8 +24,7 @@ router.get("/report/stats", async (req, res) => {
     if (year && typeof year === "string" && year !== "All") {
       q.year = year;
     }
-    let table = await (await getDB()).collection("records");
-    //let table = await database.collection("records");
+    let table = await database.collection("records");
     let records = await table.find(q).toArray();
 
     const total = records.length;
@@ -60,8 +58,7 @@ router.get("/report/stats", async (req, res) => {
   }
 });
 router.get("/:id", async (req, res) => {
-  //let collection = await database.collection("records");
-  let collection = await (await getDB()).collection("records");
+  let collection = await database.collection("records");
   let query = { _id: new ObjectId(req.params.id) };
   let result = await collection.findOne(query);
 
@@ -87,8 +84,7 @@ router.post("/", async (req, res) => {
       position: req.body.position,
       year: req.body.year,
     };
-    let table = await (await getDB()).collection("records");
-    //let table = await database.collection("records");
+    let table = await database.collection("records");
     let output = await table.insertOne(record, {session: transaction});
     await transaction.commitTransaction(); // Commit completed add member transaction
     res.send(output).status(204);
@@ -126,8 +122,8 @@ router.patch("/:id", async (req, res) => {
         year: req.body.year,
       },
     };
-    let table = await (await getDB()).collection("records");
-    //let table = await database.collection("records");
+
+    let table = await database.collection("records");
     let output = await table.updateOne(q, newData, {session: transaction});
     await transaction.commitTransaction(); // Commit completed update member transaction
     res.send(output).status(200);
@@ -149,9 +145,8 @@ router.delete("/:id", async (req, res) => {
     // End injection protection
 
     const query = { _id: new ObjectId(req.params.id) };
-    
-    const collection = (await getDB()).collection("records");
-    //const collection = database.collection("records");
+
+    const collection = database.collection("records");
     let result = await collection.deleteOne(query);
 
     res.send(result).status(200);
@@ -160,5 +155,50 @@ router.delete("/:id", async (req, res) => {
     res.status(500).send("Error deleting record");
   }
 });
+
+/* router.get("/report/stats", async (req, res) => {
+  try {
+    let q = {};
+    const { year, position } = req.query;
+    if (position && position !== "All" && typeof position === "string") {
+      q.position = position;
+    }
+    if (year && year !== "All" && typeof year === "string") {
+      q.year = year;
+    }
+    let table = await db.collection("records");
+    let results = await table.find(q).toArray();
+
+    const total = results.length;
+
+    const yearCounts = results.reduce((acc, r) => {
+      acc[r.year] = (acc[r.year] || 0) + 1;
+      return acc;
+    }, {});
+
+    const positionCounts = results.reduce((acc, r) => {
+      acc[r.position] = (acc[r.position] || 0) + 1;
+      return acc;
+    }, {});
+
+    // Get distinct values for filter dropdowns
+    const mems = await table.find({}).toArray();
+    const positions = [...new Set(mems.map(m => m.position).filter(Boolean))];
+    const years = [...new Set(mems.map(m => m.year).filter(Boolean))];
+    // End get distinct values for dropdowns
+    // Send stats
+    res.status(200).json({
+      total,
+      results,
+      yearCounts,
+      positionCounts,
+      years,
+      positions,
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("Error generating report");
+  }
+}); */
 
 export default router;

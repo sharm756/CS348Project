@@ -10,8 +10,7 @@ export default function Report() {
 
   useEffect(() => {
     async function filter() {
-      const response = await fetch("https://cs348project-b5vn.onrender.com/record/report/stats");
-      //const response = await fetch("http://localhost:5050/record/report/stats");
+      const response = await fetch("http://localhost:5050/record/report/stats");
       const results = await response.json();
       setPositions(results.positions);
       setYears(results.years);
@@ -27,8 +26,7 @@ export default function Report() {
       position: selectedPosition,
     });
     // Populate report:
-    const response = await fetch(`https://cs348project-b5vn.onrender.com/record/report/stats?${params}`);
-    //const response = await fetch(`http://localhost:5050/record/report/stats?${params}`);
+    const response = await fetch(`http://localhost:5050/record/report/stats?${params}`);
     const results = await response.json();
     setReport(results);
     // End populate report
