@@ -1,6 +1,6 @@
 import express from "express";
 
-import database, { client } from "../db/connection.js";
+import database, { client, getDB } from "../db/connection.js";
 
 import { ObjectId } from "mongodb";
 
@@ -8,7 +8,8 @@ const router = express.Router();
 
 // Retrieve current data
 router.get("/", async (req, res) => {
-  let collection = await database.collection("records");
+  let collection = await (await getDB()).collection("records");
+  //let collection = await database.collection("records");
   let results = await collection.find({}).toArray();
   res.send(results).status(200);
 });
@@ -24,7 +25,8 @@ router.get("/report/stats", async (req, res) => {
     if (year && typeof year === "string" && year !== "All") {
       q.year = year;
     }
-    let table = await database.collection("records");
+    let table = await (await getDB()).collection("records");
+    //let table = await database.collection("records");
     let records = await table.find(q).toArray();
 
     const total = records.length;
@@ -58,7 +60,8 @@ router.get("/report/stats", async (req, res) => {
   }
 });
 router.get("/:id", async (req, res) => {
-  let collection = await database.collection("records");
+  //let collection = await database.collection("records");
+  let collection = await (await getDB()).collection("records");
   let query = { _id: new ObjectId(req.params.id) };
   let result = await collection.findOne(query);
 
@@ -84,7 +87,8 @@ router.post("/", async (req, res) => {
       position: req.body.position,
       year: req.body.year,
     };
-    let table = await database.collection("records");
+    let table = await (await getDB()).collection("records");
+    //let table = await database.collection("records");
     let output = await table.insertOne(record, {session: transaction});
     await transaction.commitTransaction(); // Commit completed add member transaction
     res.send(output).status(204);
@@ -122,8 +126,8 @@ router.patch("/:id", async (req, res) => {
         year: req.body.year,
       },
     };
-
-    let table = await database.collection("records");
+    let table = await (await getDB()).collection("records");
+    //let table = await database.collection("records");
     let output = await table.updateOne(q, newData, {session: transaction});
     await transaction.commitTransaction(); // Commit completed update member transaction
     res.send(output).status(200);
@@ -145,8 +149,9 @@ router.delete("/:id", async (req, res) => {
     // End injection protection
 
     const query = { _id: new ObjectId(req.params.id) };
-
-    const collection = database.collection("records");
+    
+    const collection = (await getDB()).collection("records");
+    //const collection = database.collection("records");
     let result = await collection.deleteOne(query);
 
     res.send(result).status(200);

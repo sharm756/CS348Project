@@ -47,13 +47,14 @@ async function connectDB() {
     setTimeout(connectDB, 5000);
   }
 }
+connectDB().catch(console.error);
 
-connectDB();
+export async function getDB() {
+  if (!client.topology || !client.topology.isConnected()) {
+    await client.connect();
+  }
+  return client.db("members");
+}
 
-client.on("close", () => {
-  console.log("MongoDB connection closed. Reconnecting...");
-  connectDB();
-});
-
-let table = client.db("members");
-export default table;
+export { client };
+export default client.db("members");
